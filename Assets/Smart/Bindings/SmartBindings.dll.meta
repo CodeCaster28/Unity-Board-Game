@@ -1,0 +1,38 @@
+fileFormatVersion: 2
+guid: 3c47746434abf0b46a53d9d23353a639
+PluginImporter:
+  serializedVersion: 1
+  iconMap:
+    Smart.Managers.BindingsManager: {fileID: 2800000, guid: db58f6ef85e54e94c9e14ac398f7a8a5, type: 3}
+    Smart.Bindings.BindingRoot: {fileID: 2800000, guid: 4d919b800882a8645bde8cfd860578e9, type: 3}
+    Smart.Bindings.CollectionBinding: {fileID: 2800000, guid: fabffe2f3b8e0e741b4d154f7d488094, type: 3}
+    Smart.Bindings.Values.BooleanBinding: {fileID: 2800000, guid: 91076bd476e5e2e449d6842ba2707dc7, type: 3}
+    Smart.Bindings.Values.ColorBinding: {fileID: 2800000, guid: 95411d5bc2c867647aaebec06c22eda3, type: 3}
+    Smart.Bindings.Values.FloatBinding: {fileID: 2800000, guid: fe5e82e4010558947bc0ae482971f602, type: 3}
+    Smart.Bindings.Values.IntegerBinding: {fileID: 2800000, guid: d1fe19055d304744b8d262a2e0e7392b, type: 3}
+    Smart.Bindings.Values.AudioBinding: {fileID: 2800000, guid: ecaa9ad6cb761234296a64a0a703b0ea, type: 3}
+    Smart.Bindings.Values.SpriteBinding: {fileID: 2800000, guid: f30892d99bf718841b9ac00d7d2aa0d4, type: 3}
+    Smart.Bindings.Values.TextBinding: {fileID: 2800000, guid: a779076a861d5f2428507dd2065daddb, type: 3}
+    Smart.Bindings.Method.BooleanMethodBinding: {fileID: 2800000, guid: 59ded73d5cd53ec449c542ee851ea542, type: 3}
+    Smart.Bindings.Method.FloatMethodBinding: {fileID: 2800000, guid: 0c1d85df94cac924bb5477c2b5234ab8, type: 3}
+    Smart.Bindings.Method.IntegerMethodBinding: {fileID: 2800000, guid: 0e28fa08d47659c4fa61163a30abdd34, type: 3}
+    Smart.Bindings.Method.ObjectMethodBinding: {fileID: 2800000, guid: b16f1553a38b33d47800225d225b7527, type: 3}
+    Smart.Bindings.Method.TextMethodBinding: {fileID: 2800000, guid: 81babea3b983e0e49ba01632a6358935, type: 3}
+    Smart.Bindings.Method.VoidMethodBinding: {fileID: 2800000, guid: a53b34701ae75ac44a511363220faebb, type: 3}
+  executionOrder: {}
+  isPreloaded: 0
+  platformData:
+    Any:
+      enabled: 1
+      settings: {}
+    Editor:
+      enabled: 0
+      settings:
+        DefaultValueInitialized: true
+    WindowsStoreApps:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+  userData: versionNumber
+  assetBundleName: 
+  assetBundleVariant: 

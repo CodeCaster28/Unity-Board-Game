@@ -1,0 +1,36 @@
+fileFormatVersion: 2
+guid: 7eaaf8612fdab2b419c0194f0a0a1435
+PluginImporter:
+  serializedVersion: 1
+  iconMap:
+    Smart.Managers.CoroutinesManager: {fileID: 2800000, guid: 866a584aeb91d804d80d845eefb96f16, type: 3}
+    Smart.Managers.UpdatesManager: {fileID: 2800000, guid: 7e367d6dbb2afd0418841f3c8770bb65, type: 3}
+    Smart.Managers.CanvasManager: {fileID: 2800000, guid: d19fa129afdc7fa4195549492f45bd1c, type: 3}
+    Smart.Helpers.DelayHelper: {fileID: 2800000, guid: 8735975a32a7fd14facc93d684acee2b, type: 3}
+    Smart.Helpers.EventsHelper: {fileID: 2800000, guid: 318cc3a01cf090346a3c08fa6c4ff887, type: 3}
+    Smart.Helpers.CommandsHelper: {fileID: 2800000, guid: 81ff65b5a229d03459791a0e08c58245, type: 3}
+    Smart.Helpers.DontDestroyHelper: {fileID: 2800000, guid: a4fe06cab0f1ef0459cca06eb323e033, type: 3}
+    Smart.Helpers.ToggleHelper: {fileID: 2800000, guid: 13424c1b42f0b184497bd9a67275b0ef, type: 3}
+    Smart.Helpers.PopupHelper: {fileID: 2800000, guid: a7ee5f05e1e356742aa8407957f73163, type: 3}
+    Smart.Helpers.InputFieldHelper: {fileID: 2800000, guid: e03895857cbb353419cceaccb1091a51, type: 3}
+    Smart.Helpers.CollisionTriggerHelper: {fileID: 2800000, guid: 89566c87cb2a5b34991363d354bd498f, type: 3}
+    Smart.Helpers.TemplateHelper: {fileID: 2800000, guid: c950d4434959e084db75199b45fb0e45, type: 3}
+    Smart.Helpers.JointBreakHelper: {fileID: 2800000, guid: 61d80332cc0a8ac4e8efb259223b8a4e, type: 3}
+    Smart.Helpers.LightLODHelper: {fileID: 2800000, guid: d7085a2a1ff24c64d9becd9de887c692, type: 3}
+  executionOrder: {}
+  isPreloaded: 0
+  platformData:
+    Any:
+      enabled: 1
+      settings: {}
+    Editor:
+      enabled: 0
+      settings:
+        DefaultValueInitialized: true
+    WindowsStoreApps:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
+  userData: versionNumber
+  assetBundleName: 
+  assetBundleVariant: 

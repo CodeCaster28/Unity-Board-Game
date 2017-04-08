@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 11ee7e040cd4a1a499d5726c06f34181
+timeCreated: 1491563960
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Weltron Special Power
+  fontNames:
+  - Weltron Special Power
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
