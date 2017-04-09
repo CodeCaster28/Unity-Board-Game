@@ -43,8 +43,8 @@ TODO: Add player tutorial.
 **To Do**
 
 * Tutorials!
-* Save removing field
-* Fix empty link (null or mising) to any other node results in game crash
+* Safe removing field
+* Fix empty link (null or mising) to any other node resulting in game crash
 * Remember path unreached in previous turn
 * Possibility to cancel movement
 * Dice throw
