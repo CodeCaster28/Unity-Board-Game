@@ -5,37 +5,38 @@ using UnityEngine;
 
 public class FieldManager : GenericSingletonClass<FieldManager> 
 {
-	private Field[] gameFields;
+	private List<Field> gameFields;
 	private Field currentPosition;
 
 	public Material Dot;            // Path "dot" material to display on marked path
 	public Material Cross;          // Path "cross" material to display on last field in marked path
 
 	void Start() {
-		gameFields = GetComponentsInChildren<Field>();		// Store all fields
-		foreach (Field field in gameFields) {
-			ClearField(field);                              // Clear fields (make unmarked)
-		}
+		gameFields = GetComponentsInChildren<Field>().ToList();      // Store all fields
+		ClearAllFields();
 	}
 
 	// Global Methods
 
-	public void MarkPath(Field clickedField) {
+	public void MarkPath(Field clickedField, int movementPoints) {
 		currentPosition = PlayerManager.GetCurrentPlayer().GetPosition();
 		if (!(currentPosition == clickedField))
-			PlayerManager.SetCurrentPath(HighlightPath(currentPosition, clickedField));
+			PlayerManager.SetCurrentPath(HighlightPath(currentPosition, movementPoints, clickedField));
 	}
 
-	private List<Field> HighlightPath(Field Start, Field End) {
+	private List<Field> HighlightPath(Field Start, int movementPoints, Field End) {
 
 		List<Field> path = SearchPath.FindPath(Start, End).ToList();
-		foreach (Field field in gameFields) {
-			ClearField(field);
-		}
+		List<Field> walkablePath = path.Take(movementPoints).ToList();
+		ClearAllFields();
 		foreach (Field field in path) {
+			ShowField(field);
+		}
+		foreach (Field field in walkablePath) {
 			HighlightField(field);
 		}
 		CrossField(path[path.Count - 1]);
+		CrossFieldWalkable(walkablePath[walkablePath.Count - 1]);
 		return path;
 	}
 
@@ -46,13 +47,34 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 		field.GetComponent<MeshRenderer>().material.color = Color.clear;
 	}
 
+	public void ClearAllFields(List<Field> path) {
+		foreach (Field field in path) {
+			ClearField(field);
+		}
+	}
+
+	public void ClearAllFields() {
+		foreach (Field field in gameFields) {
+			ClearField(field);
+		}
+	}
+
+	private void ShowField(Field field) {
+		field.GetComponent<MeshRenderer>().material.color = Color.white;
+	}
+
 	private void HighlightField(Field field) {
+		field.GetComponent<MeshRenderer>().material.color = PlayerManager.GetCurrentPlayer().playerColor;
+	}
+
+	private void CrossFieldWalkable(Field field) {
+		field.GetComponent<MeshRenderer>().material = Cross;
 		field.GetComponent<MeshRenderer>().material.color = PlayerManager.GetCurrentPlayer().playerColor;
 	}
 
 	private void CrossField(Field field) {
 		field.GetComponent<MeshRenderer>().material = Cross;
-		field.GetComponent<MeshRenderer>().material.color = PlayerManager.GetCurrentPlayer().playerColor;
+		field.GetComponent<MeshRenderer>().material.color = Color.white;
 	}
 
 	// Editor GUI button function, called from each field

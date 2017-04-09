@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerManager : GenericSingletonClass<PlayerManager>
@@ -9,12 +10,13 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 
 	public List<Player> Players;
 	private static Player CurrentPlayer;
-	private static List<Field> currentPath;
+	private static List<Field> CurrentPath;
 	private static int PlayerIndex;
 	private static bool IsSubscribedStartWalk;
+	private int MovementPoints;
 
 	void Start () {
-
+		MovementPoints = 5;
 		PlayerIndex = 0;
 		TurnStart();
 	}
@@ -27,6 +29,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 			TurnStarted();
 		}
 		CycleNextPlayer();
+		FieldManager.Master.ClearAllFields();
 		TurnPathMark();
 	}
 
@@ -43,8 +46,8 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	}
 
 	private void TurnPathMarked(Field targetField) {	// Wait for confirmation stage (path can be redefinied)
-		FieldManager.Master.MarkPath(targetField);
-		if (currentPath != null && IsSubscribedStartWalk == false) {            // Before allowing to go down this path, check if it's correct
+		FieldManager.Master.MarkPath(targetField, MovementPoints);
+		if (CurrentPath != null && IsSubscribedStartWalk == false) {	// Before allowing to go down this path, check if it's correct
 			IsSubscribedStartWalk = true;
 			InputManager.KeySpace += TurnPathStartWalk;
 		}
@@ -53,7 +56,9 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	private void TurnPathStartWalk () {		// Path travel stage, animate movement (can't mark new path/start new walk)
 		InputManager.MousePressed -= TurnPathMarked;
 		InputManager.KeySpace -= TurnPathStartWalk;
-		StartCoroutine(PathTick(currentPath));
+		List<Field> walkablePath = new List<Field>();
+		walkablePath = CurrentPath.Take(MovementPoints).ToList();	// Travel only walkable path
+		StartCoroutine(PathTick(walkablePath));
 	}
 
 	private IEnumerator PathTick(List<Field> currentPath) {
@@ -79,7 +84,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	}
 
 	public static void SetCurrentPath(List<Field> path) {
-		currentPath = path;
+		CurrentPath = path;
 	}
 
 	// Destroy
