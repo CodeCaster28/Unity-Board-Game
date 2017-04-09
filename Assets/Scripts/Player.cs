@@ -5,33 +5,44 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
 	public Color playerColor;
-	private Field currentPosition;
+	private Field Position;
 	private bool playerIsMoving;
 	private Field startPos;
-	private Field CurrentDestination;
+	private Field Destination;
+	private Vector3 Offset;
 
 	void Start () {                         // On Start set position to startpoint
+		Offset = Vector3.zero;
 		startPos = GameObject.FindGameObjectWithTag("StartPoint").GetComponent<Field>();
 		SetPosition(startPos);
 	}
 
 	private void Update() {
 		if (playerIsMoving == true) {		// Lineary smooth player go to position
-			transform.position = Vector3.Lerp(transform.position, CurrentDestination.transform.position, 0.08f);
+			transform.position = Vector3.Lerp(transform.position, Destination.transform.position + Offset, 0.08f);
 		}
 	}
 
 	public Field GetPosition() {			// Get current position of this pawn
-		return currentPosition.GetComponent<Field>();
+		return Position.GetComponent<Field>();
 	}
 
-	public void SetPosition(Field target) {	// Set current position and unlock animation in update
-		currentPosition = target;
+	public void SetPosition(Field target) { // Set current position and unlock animation in update
+
+		if (Position != null) {
+			Position.DropPlayer(this);		// Remove player from old position
+			Position.PlayersResidingCount--;
+		}
+		Position = target;					// New position is a target
+		Offset = Position.AddPlayer(this);	// Add player to new position
+		Position.PlayersResidingCount++;
 		if (playerIsMoving == false) {
 			playerIsMoving = true;
 			StartCoroutine(CheckMoving());	// Loop checking if player stopped moving, then lock update animation
 		}
-		CurrentDestination = target;
+		
+		Destination = target;
+
 	}
 
 	private IEnumerator CheckMoving() {
