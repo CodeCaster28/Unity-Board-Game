@@ -20,25 +20,32 @@ Move you camera around with W,S,A,D keys, rotate it holding RMB while moving the
 Each player can choose a path to move to, firstly select a path you wish to move and then press SPACE to make your pawn follow path. You can freerly reassign path if you wish to change it before before confirming it with Space.
 
 TODO: Add field creation tutorial.
+TODO: Add player tutorial.
 
 **Major Features**
 
+* Full featured camera with rotation, movement and zooming in/out
 * Shortest path finding algorithm (A Star algorithm)
 * Turn-based game flow using events
-* Unlimited number of players, colored path
+* Heroes M&M movement style (free travelling until movement points depletion)
+* 4 players, up to 9 players supported on field (for no pawn overlapping)
 * GUI Text fade animation using Animator
 * Editor Script that adds new Field and automatically assign it's properties
 
 **What is NOT included**
 
 * Dice throw based on physics
-* Algorithm showing all possible moves.
-* Special fields when something is happening
+* Algorithm showing all possible moves
+* Special field events when something is happening
+* Player statistics or collectibles of any kind
 * GUI (game immediately starts, only "next turn" text is displayed)
 
 **To Do**
 
-* Limited movement
-* Heroes M&M movement style
+* Tutorials!
+* Save removing field
+* Fix empty link (null or mising) to any other node results in game crash
+* Remember path unreached in previous turn
+* Possibility to cancel movement
 * Dice throw
 * Handle multiple pawns in single field (now pawns are overlapping)
