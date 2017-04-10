@@ -7,6 +7,8 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 {
 	public delegate void TurnStartDelegate();
 	public static event TurnStartDelegate TurnStarted;
+	public delegate void GameBusyDelegate(bool enabled);
+	public static event GameBusyDelegate GameBusy;
 
 	public List<Player> Players;
 	private static Player CurrentPlayer;
@@ -57,7 +59,10 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 		}
 	}
 	
-	private void TurnPathStartWalk () {		// Path travel stage, animate movement (can't mark new path/start new walk)
+	private void TurnPathStartWalk () {     // Path travel stage, animate movement (can't mark new path/start new walk)
+		if (GameBusy != null) {
+			GameBusy(false);
+		}
 		InputManager.MousePressed -= TurnPathMarked;
 		InputManager.KeySpace -= TurnPathStartWalk;
 		List<Field> walkablePath = new List<Field>();
@@ -77,16 +82,26 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 			FieldManager.Master.ClearField(path[i]);
 		}
 
-		CurrentPath = null;                 // Remove current path from memory, so it has to be marked again in new turn
-		if (MovementPoints == 0)
-			TurnStart();
-		else
-			TurnPathMark();
+		CurrentPath = null;     // Remove current path from memory, so it has to be marked again in new turn
+		//if (MovementPoints == 0)
+		//	TurnStart();
+		//else
+		if (GameBusy != null) {
+			GameBusy(true);
+		}
+		TurnPathMark();
 		yield return null;
 	}
 
 	// Global Methods
 	
+	public void EndTurn() {
+		InputManager.MousePressed -= TurnPathMarked;
+		InputManager.KeySpace -= TurnPathStartWalk;
+		CurrentPath = null;
+		TurnStart();
+	}
+
 	public static Player GetCurrentPlayer() {
 		return CurrentPlayer;
 	}

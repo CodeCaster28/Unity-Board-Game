@@ -27,16 +27,22 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 	private List<Field> HighlightPath(Field Start, int movementPoints, Field End) {
 
 		List<Field> path = SearchPath.FindPath(Start, End).ToList();
-		List<Field> walkablePath = path.Take(movementPoints).ToList();
+		List<Field> walkablePath = null;
+		if (movementPoints != 0) {
+			walkablePath = path.Take(movementPoints).ToList();
+		}
 		ClearAllFields();
 		foreach (Field field in path) {
 			ShowField(field);
 		}
-		foreach (Field field in walkablePath) {
-			HighlightField(field);
+		if (walkablePath != null) {
+			foreach (Field field in walkablePath) {
+				HighlightField(field);
+			}
 		}
 		CrossField(path[path.Count - 1]);
-		CrossFieldWalkable(walkablePath[walkablePath.Count - 1]);
+		if (walkablePath != null)
+			CrossFieldWalkable(walkablePath[walkablePath.Count - 1]);
 		return path;
 	}
 

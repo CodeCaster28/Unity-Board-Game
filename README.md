@@ -29,7 +29,7 @@ TODO: Add player tutorial.
 * Turn-based game flow using events
 * Heroes M&M movement style (free travelling until movement points depletion)
 * 4 players, up to 9 players supported on field (for no pawn overlapping)
-* GUI Text fade animation using Animator
+* GUI Text fade animation using Animator and end turn end button
 * Editor Script that adds new Field and automatically assign it's properties
 
 **What is NOT included**
@@ -48,4 +48,3 @@ TODO: Add player tutorial.
 * Remember path unreached in previous turn
 * Possibility to cancel movement
 * Dice throw
-* Handle multiple pawns in single field (now pawns are overlapping)
