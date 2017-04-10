@@ -38,9 +38,11 @@ public class InputManager : MonoBehaviour {
 		if (Input.GetMouseButtonDown(0)) {
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out hit)) {
-				if (hit.collider.GetComponent<Field>() != null) {
-					clickedField = hit.collider.GetComponent<Field>();
-					OnMousePressed(clickedField);
+				if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) { 
+					if (hit.collider.GetComponent<Field>() != null) {
+						clickedField = hit.collider.GetComponent<Field>();
+						OnMousePressed(clickedField);
+					}
 				}
 			}
 		}
