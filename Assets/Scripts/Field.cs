@@ -27,6 +27,10 @@ public class Field : MonoBehaviour{
 		return FieldManager.AddNew(this);
 	}
 
+	public void Remove() {        // Add button with method listed in field manager
+		FieldManager.Remove(this, adjactedNodes);
+	}
+
 	private void Start() {              // Initials for shortest-path finding algorithm
 		//PlayersResiding = new List<Player>();
 		Parent = null;

@@ -110,13 +110,17 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 	}
 
 	// TODO: add remove feature which will clear this field from other's fields adjacted list
-	/*public void RemoveReferences() {
+	public static void Remove(Field caller, List<Field> adjactedNodes) {
+
 		for (int i = 0; i < adjactedNodes.Count; i++) {
 			for (int j = 0; j < adjactedNodes[i].adjactedNodes.Count; j++) {
-				if (adjactedNodes[i].adjactedNodes[j] == null) {
+				if (adjactedNodes[i].adjactedNodes[j].name == caller.gameObject.transform.name) {
+					Debug.Log("Removed adjacted node [" + adjactedNodes[i].adjactedNodes[j].name + "] of " + caller.gameObject.transform.name);
 					adjactedNodes[i].adjactedNodes.RemoveAt(j);
+					
 				}
 			}
 		}
-	}*/
+		DestroyImmediate(caller.gameObject);
+	}
 }

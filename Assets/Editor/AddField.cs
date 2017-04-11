@@ -12,14 +12,10 @@ public class AddField : Editor {
 		if (GUILayout.Button("Add Field")) {
 			Selection.activeGameObject = myScript.AddNew();
 		}
-	}
-	/*public void OnDestroy() {   //Run method RemoveReferences when object is deleted
-		Field myScript = (Field)target;
-		myScript.RemoveReferences();
-		if (Application.isEditor) {
-			if (((Field)target) == null) {
-				Debug.Log("Field node deleted.");
-			}
+		Field myScript2 = (Field)target;
+		if (GUILayout.Button("Remove Field")) {
+			myScript2.Remove();
+			GUIUtility.ExitGUI();
 		}
-	}*/
+	}
 }
