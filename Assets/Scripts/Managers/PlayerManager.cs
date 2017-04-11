@@ -19,6 +19,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	private int PlayerCount;
 
 	void Start () {
+		AEDice.DiceAnimResult += RollMovementPoints;
 		PlayerCount = Players.Count;
 		PlayerIndex = 0;
 		TurnStart();
@@ -27,14 +28,15 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	// Turn Chain
 
 	private void TurnStart() {
-		MovementPoints = 5;
-		
+		MovementPoints = -1;		// Not rolled yet
+
 		if (TurnStarted != null) {
 			TurnStarted();
 		}
 		CycleNextPlayer();
 		FieldManager.Master.ClearAllFields();
-		TurnPathMark();
+		TunrDiceRoll();
+		// TurnPathMark();
 	}
 
 	private void CycleNextPlayer() {
@@ -45,7 +47,12 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 		}
 	}
 
+	private void TunrDiceRoll() {   // Wait for dice roll
+		AEDice.DiceAnimEnd += TurnPathMark;
+	}
+
 	private void TurnPathMark() {           // Marking path stage
+		AEDice.DiceAnimEnd -= TurnPathMark;
 		IsSubscribedStartWalk = false;
 		InputManager.MousePressed += TurnPathMarked;
 	}
@@ -114,8 +121,13 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 		CurrentPath = path;
 	}
 
+	public void RollMovementPoints() {
+		MovementPoints = Random.Range(1, 6) + Random.Range(1, 6);
+	}
+
 	// Destroy
 
 	private void OnDestroy() {
+		AEDice.DiceAnimResult -= RollMovementPoints;
 	}
 }

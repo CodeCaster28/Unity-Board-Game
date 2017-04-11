@@ -48,3 +48,4 @@ TODO: Add player tutorial.
 * Remember path unreached in previous turn
 * Possibility to cancel movement
 * Dice throw
+* Event log box

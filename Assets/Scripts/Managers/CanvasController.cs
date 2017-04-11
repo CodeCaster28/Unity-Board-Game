@@ -14,7 +14,19 @@ public class CanvasController : MonoBehaviour {
 			Controls.Add(child);
 		}
 		PlayerManager.TurnStarted += ShowNewTurnText;
+		PlayerManager.TurnStarted += ShowDice;
 		PlayerManager.GameBusy += NewTurnButtonEnabled;
+		AEDice.DiceAnimEnd += NewTurnButtonEnabled;
+	}
+
+	private void ShowDice () {
+		Transform image = Controls.Where(obj => obj.name == "DiceRoll").SingleOrDefault();
+		Transform button = Controls.Where(obj => obj.name == "DiceRollButton").SingleOrDefault();
+
+		if (button.GetComponent<Button>().interactable == false) {
+			button.GetComponent<Button>().interactable = true;
+			image.GetComponent<Animator>().SetTrigger("ResetDice");
+		}
 	}
 
 	private void ShowNewTurnText() {
@@ -22,8 +34,12 @@ public class CanvasController : MonoBehaviour {
 		text.GetComponent<Animator>().SetTrigger("FadeOut");
 	}
 
+	private void NewTurnButtonEnabled() {
+		Transform button = Controls.Where(obj => obj.name == "TurnButton").SingleOrDefault();
+		button.GetComponent<Button>().interactable = true;
+	}
+
 	private void NewTurnButtonEnabled(bool enabled) {
-		Debug.Log("Toggled: " + (enabled == true ? "On" : "Off"));
 		Transform button = Controls.Where(obj => obj.name == "TurnButton").SingleOrDefault();
 		button.GetComponent<Button>().interactable = enabled;
 	}
