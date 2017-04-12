@@ -26,7 +26,6 @@ public class Field : MonoBehaviour{
 	public GameObject AddNew() {		// Add button with method listed in field manager
 		return FieldManager.AddNew(this);
 	}
-
 	public void Remove() {        // Add button with method listed in field manager
 		FieldManager.Remove(this, adjactedNodes);
 	}

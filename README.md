@@ -27,7 +27,7 @@ Each player can choose a path to move to, firstly select a path you wish to move
 * Heroes M&M movement style (free travelling until movement points depletion)
 * 4 players, up to 9 players supported on field (for no pawn overlapping)
 * GUI Animations and buttons
-* Editor Script that adds new Field and automatically assign it's properties
+* Editor Script that adds/remove Field and automatically assign it's properties or removes old dependencies
 
 **What is NOT included**
 
