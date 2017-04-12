@@ -9,7 +9,6 @@ public class CanvasController : MonoBehaviour {
 
 	private List<Transform> Controls;
 	private string CurrentDiceVal;
-	// private bool diceTilted;
 
 	private void Start() {
 		CurrentDiceVal = "00";
@@ -20,7 +19,6 @@ public class CanvasController : MonoBehaviour {
 		PlayerManager.TurnStarted += ShowNewTurnText;
 		PlayerManager.TurnStarted += ShowDice;
 		PlayerManager.GameBusy += NewTurnButtonEnabled;
-		//PlayerManager.PathWalkStarted += HideResult;
 		PlayerManager.PathTicked += UpdateResult;
 		AEDice.DiceAnimEnd += NewTurnButtonEnabled;
 		AEDice.DiceAnimResult += ShowResult;
@@ -29,7 +27,6 @@ public class CanvasController : MonoBehaviour {
 	private void ShowDice () {
 		Transform image = Controls.Where(obj => obj.name == "DiceRoll").SingleOrDefault();
 		Transform button = Controls.Where(obj => obj.name == "DiceRollButton").SingleOrDefault();
-		// diceTilted = false;
 		if (button.GetComponent<Button>().interactable == false) {
 			button.GetComponent<Button>().interactable = true;
 			image.GetComponent<Animator>().SetTrigger("ResetDice");
@@ -56,10 +53,7 @@ public class CanvasController : MonoBehaviour {
 			}
 			else {
 				str = str[0].ToString();
-				//if (diceTilted == false) {
-					// diceTilted = true;
 					text.GetComponent<Animator>().SetTrigger("Tilt");
-				//}
 			}
 		}
 		else if (str.Length == 1) {
@@ -104,7 +98,6 @@ public class CanvasController : MonoBehaviour {
 		PlayerManager.TurnStarted -= ShowNewTurnText;
 		PlayerManager.TurnStarted -= ShowDice;
 		PlayerManager.GameBusy -= NewTurnButtonEnabled;
-		//PlayerManager.PathWalkStarted -= HideResult;
 		PlayerManager.PathTicked -= UpdateResult;
 		AEDice.DiceAnimEnd -= NewTurnButtonEnabled;
 		AEDice.DiceAnimResult -= ShowResult;

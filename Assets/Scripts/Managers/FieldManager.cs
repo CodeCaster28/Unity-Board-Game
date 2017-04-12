@@ -14,14 +14,26 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 	void Start() {
 		gameFields = GetComponentsInChildren<Field>().ToList();      // Store all fields
 		ClearAllFields();
+		Initialize();
+	}
+
+	void Initialize() {
+		foreach (Field field in gameFields) {
+			foreach (Field adjacted in field.adjactedNodes) {
+				if (adjacted == null) {
+					Debug.Log("Missing Adjacted Node in " + field.gameObject.name + ", the game won't work properly!");
+				}
+			}
+		}
 	}
 
 	// Global Methods
 
-	public void MarkPath(Field clickedField, int movementPoints) {
+	public List<Field> MarkPath(Field clickedField, int movementPoints) {
 		currentPosition = PlayerManager.GetCurrentPlayer().GetPosition();
 		if (!(currentPosition == clickedField))
-			PlayerManager.SetCurrentPath(HighlightPath(currentPosition, movementPoints, clickedField));
+			return HighlightPath(currentPosition, movementPoints, clickedField);
+		else return null;
 	}
 
 	private List<Field> HighlightPath(Field Start, int movementPoints, Field End) {
@@ -83,6 +95,8 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 		field.GetComponent<MeshRenderer>().material.color = Color.white;
 	}
 
+
+
 	// Editor GUI button function, called from each field
 	// Allows to create new path from editor inspector, assigning name, id and adjacencies automatically (very handy)
 	public static GameObject AddNew(Field source) {
@@ -109,7 +123,8 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 		return newField.gameObject;
 	}
 
-	// TODO: add remove feature which will clear this field from other's fields adjacted list
+	// Editor GUI button function, called from each field
+	// Allows to delete field and remove any references to it from adjacted fields
 	public static void Remove(Field caller, List<Field> adjactedNodes) {
 
 		for (int i = 0; i < adjactedNodes.Count; i++) {

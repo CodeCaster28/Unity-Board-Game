@@ -10,8 +10,10 @@ public class Player : MonoBehaviour {
 	private Field startPos;
 	private Field Destination;
 	private Vector3 Offset;
+	private List<Field> CurrentPath;
 
 	void Start () {                         // On Start set position to startpoint
+		CurrentPath = null;
 		Offset = Vector3.zero;
 		startPos = GameObject.FindGameObjectWithTag("StartPoint").GetComponent<Field>();
 		SetPosition(startPos);
@@ -25,6 +27,14 @@ public class Player : MonoBehaviour {
 
 	public Field GetPosition() {			// Get current position of this pawn
 		return Position.GetComponent<Field>();
+	}
+
+	public void SetPath(List<Field> path) {            // Get current position of this pawn
+		CurrentPath = path;
+	}
+
+	public List<Field> GetPath() {            // Get current position of this pawn
+		return CurrentPath;
 	}
 
 	public void SetPosition(Field target) { // Set current position and unlock animation in update

@@ -31,7 +31,6 @@ public class Field : MonoBehaviour{
 	}
 
 	private void Start() {              // Initials for shortest-path finding algorithm
-		//PlayersResiding = new List<Player>();
 		Parent = null;
 		Cost = 1;
 	}

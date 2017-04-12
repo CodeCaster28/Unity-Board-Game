@@ -38,7 +38,6 @@ Each player can choose a path to move to, firstly select a path you wish to move
 
 **To Do**
 
-* Fix empty link (null or mising) to any other node resulting in game crash
 * Remember path unreached in previous turn
 * Possibility to cancel movement
 * Event log box

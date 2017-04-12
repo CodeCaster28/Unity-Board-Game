@@ -9,8 +9,6 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	public static event TurnStartDelegate TurnStarted;
 	public delegate void GameBusyDelegate(bool enabled);
 	public static event GameBusyDelegate GameBusy;
-	// public delegate void PathWalkStartedDelegate();
-	// public static event PathWalkStartedDelegate PathWalkStarted;
 	public delegate void PathTickedDelegate();
 	public static event PathTickedDelegate PathTicked;
 
@@ -23,7 +21,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	private int PlayerCount;
 
 	void Start () {
-		// AEDice.DiceAnimResult += RollMovementPoints;
+
 		PlayerCount = Players.Count;
 		PlayerIndex = 0;
 		TurnStart();
@@ -39,6 +37,12 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 		}
 		CycleNextPlayer();
 		FieldManager.Master.ClearAllFields();
+
+		if (CurrentPlayer.GetPath() != null) {
+			CurrentPath = FieldManager.Master.MarkPath(CurrentPlayer.GetPath().Last(), 0);
+			
+		}
+
 		TunrDiceRoll();
 	}
 
@@ -50,27 +54,30 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 		}
 	}
 
-	private void TunrDiceRoll() {   // Wait for dice roll
+	private void TunrDiceRoll() {   // Wait for dice roll, load previously selected path (if any)
 		AEDice.DiceAnimEnd += TurnPathMark;
+
 	}
 
 	private void TurnPathMark() {           // Marking path stage
-		AEDice.DiceAnimEnd -= TurnPathMark;
+
 		IsSubscribedStartWalk = false;
+		if (CurrentPath != null) {
+			TurnPathMarked(CurrentPath.Last());
+		}
 		InputManager.MousePressed += TurnPathMarked;
 	}
 
-	private void TurnPathMarked(Field targetField) {	// Wait for confirmation stage (path can be redefinied)
-		FieldManager.Master.MarkPath(targetField, MovementPoints);
+	private void TurnPathMarked(Field targetField) {    // Wait for confirmation stage (path can be redefinied)
+		CurrentPath = FieldManager.Master.MarkPath(targetField, MovementPoints);
 		if (CurrentPath != null && IsSubscribedStartWalk == false) {    // Before allowing to go down this path, check if it's correct
+
 			IsSubscribedStartWalk = true;
 			InputManager.KeySpace += TurnPathStartWalk;
 		}
 	}
 	
 	private void TurnPathStartWalk () {     // Path travel stage, animate movement (can't mark new path/start new walk)
-		// if (PathWalkStarted != null)
-		//	PathWalkStarted();
 		if (GameBusy != null)
 			GameBusy(false);
 		InputManager.MousePressed -= TurnPathMarked;
@@ -92,8 +99,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 			yield return new WaitForSeconds(movementSpeed);
 			FieldManager.Master.ClearField(path[i]);
 		}
-
-		CurrentPath = null;     // Remove current path from memory, so it has to be marked again in new turn
+		
 		if (GameBusy != null) {
 			GameBusy(true);
 		}
@@ -104,8 +110,15 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	// Global Methods
 	
 	public void EndTurn() {
+		AEDice.DiceAnimEnd -= TurnPathMark;
+
+		if (CurrentPath != null) {
+			CurrentPlayer.SetPath(CurrentPath);
+		}
+
 		InputManager.MousePressed -= TurnPathMarked;
 		InputManager.KeySpace -= TurnPathStartWalk;
+
 		CurrentPath = null;
 		TurnStart();
 	}
@@ -118,10 +131,6 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 		return PlayerCount;
 	}
 
-	public static void SetCurrentPath(List<Field> path) {
-		CurrentPath = path;
-	}
-
 	public string RollMovementPoints() {
 		int a = Random.Range(1, 7);
 		int b = Random.Range(1, 7);
@@ -132,6 +141,5 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	// Destroy
 
 	private void OnDestroy() {
-		// AEDice.DiceAnimResult -= RollMovementPoints;
 	}
 }
