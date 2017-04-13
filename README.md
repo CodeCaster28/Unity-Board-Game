@@ -23,6 +23,7 @@ Each player can choose a path to move to, firstly select a path you wish to move
 
 * Full featured camera with rotation, movement and zooming in/out
 * Shortest path finding algorithm (A Star algorithm)
+* Unreached (grayed out) path is remembered for each player and can be continued in new turn
 * Turn-based game flow using events
 * Heroes M&M movement style (free travelling until movement points depletion)
 * 4 players, up to 9 players supported on field (for no pawn overlapping)
@@ -38,7 +39,6 @@ Each player can choose a path to move to, firstly select a path you wish to move
 
 **To Do**
 
-* Remember path unreached in previous turn
-* Possibility to cancel movement
+* Make certain gui elements click-through
+* Possibility to cancel movement during movement
 * Event log box
-* Make dice result appear always on center, responsible to creen size
