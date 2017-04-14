@@ -39,5 +39,4 @@ Each player can choose a path to move to, firstly select a path you wish to move
 
 **To Do**
 
-* Make certain gui elements click-through-able
 * Event log box
