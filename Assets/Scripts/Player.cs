@@ -5,14 +5,16 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
 	public Color playerColor;
-	private Field Position;
+
 	private bool playerIsMoving;
 	private Field startPos;
 	private Field Destination;
 	private Vector3 Offset;
 	private List<Field> CurrentPath;
 
-	void Start () {                         // On Start set position to startpoint
+	// Mono Methods
+
+	private void Start () {
 		CurrentPath = null;
 		Offset = Vector3.zero;
 		startPos = GameObject.FindGameObjectWithTag("StartPoint").GetComponent<Field>();
@@ -20,40 +22,46 @@ public class Player : MonoBehaviour {
 	}
 
 	private void Update() {
-		if (playerIsMoving == true) {		// Lineary smooth player go to position
+		if (playerIsMoving == true) {
 			transform.position = Vector3.Lerp(transform.position, Destination.transform.position + Offset, 0.08f);
 		}
 	}
 
-	public Field GetPosition() {			// Get current position of this pawn
+	// Global Methods
+
+	private Field Position;
+
+	public Field GetPosition() {
 		return Position.GetComponent<Field>();
 	}
 
-	public void SetPath(List<Field> path) {            // Get current position of this pawn
-		CurrentPath = path;
-	}
-
-	public List<Field> GetPath() {            // Get current position of this pawn
-		return CurrentPath;
-	}
-
-	public void SetPosition(Field target) { // Set current position and unlock animation in update
+	public void SetPosition(Field target) {
 
 		if (Position != null) {
-			Position.DropPlayer(this);		// Remove player from old position
+			Position.DropPlayer(this);
 			Position.PlayersResidingCount--;
 		}
-		Position = target;					// New position is a target
-		Offset = Position.AddPlayer(this);	// Add player to new position
+		Position = target;
+		Offset = Position.AddPlayer(this);
 		Position.PlayersResidingCount++;
 		if (playerIsMoving == false) {
 			playerIsMoving = true;
-			StartCoroutine(CheckMoving());	// Loop checking if player stopped moving, then lock update animation
+			StartCoroutine(CheckMoving());
 		}
-		
+
 		Destination = target;
 
 	}
+
+	public void SetPath(List<Field> path) {
+		CurrentPath = path;
+	}
+
+	public List<Field> GetPath() {
+		return CurrentPath;
+	}
+
+	// Private Methods
 
 	private IEnumerator CheckMoving() {
 		Vector3 startPos;

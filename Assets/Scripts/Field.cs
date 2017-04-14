@@ -14,6 +14,15 @@ public class Field : MonoBehaviour{
 	public Field Parent;
 	private Player[] PlayersResiding = new Player[10];
 
+	// Mono Methods
+
+	private void Start() {
+		Parent = null;
+		Cost = 1;
+	}
+
+	// Used by SearchPath to calculate best path
+
 	public float F {	// To Remove
 		get {
 			if (Cost != -1)
@@ -23,17 +32,17 @@ public class Field : MonoBehaviour{
 		}
 	}
 
-	public GameObject AddNew() {		// Add button with method listed in field manager
+	// GUI methods, adds buttons to Field inspector
+
+	public GameObject AddNew() {
 		return FieldManager.AddNew(this);
 	}
-	public void Remove() {        // Add button with method listed in field manager
+
+	public void Remove() {
 		FieldManager.Remove(this, adjactedNodes);
 	}
 
-	private void Start() {              // Initials for shortest-path finding algorithm
-		Parent = null;
-		Cost = 1;
-	}
+	// Player segregation
 
 	public Vector3 AddPlayer(Player player) {
 		int k = 0;

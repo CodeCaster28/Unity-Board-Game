@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class PlayerManager : GenericSingletonClass<PlayerManager>
-{
+public class PlayerManager : GenericSingletonClass<PlayerManager> {
 	public delegate void TurnStartDelegate();
 	public static event TurnStartDelegate TurnStarted;
 	public delegate void GameBusyDelegate(bool enabled);
@@ -20,7 +19,9 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	private int MovementPoints;
 	private int PlayerCount;
 
-	void Start () {
+	// Mono Methods
+
+	void Start() {
 
 		PlayerCount = Players.Count;
 		PlayerIndex = 0;
@@ -30,28 +31,15 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	// Turn Chain
 
 	private void TurnStart() {
-		MovementPoints = -1;		// Not rolled yet
 
-		if (TurnStarted != null) {
+		MovementPoints = 0;        // Not rolled yet
+		if (TurnStarted != null)
 			TurnStarted();
-		}
 		CycleNextPlayer();
 		FieldManager.Master.ClearAllFields();
-
-		if (CurrentPlayer.GetPath() != null) {
+		if (CurrentPlayer.GetPath() != null)
 			CurrentPath = FieldManager.Master.MarkPath(CurrentPlayer.GetPath().Last(), 0);
-			
-		}
-
 		TunrDiceRoll();
-	}
-
-	private void CycleNextPlayer() {
-		CurrentPlayer = Players[PlayerIndex];
-		PlayerIndex++;
-		if (PlayerIndex > Players.Count - 1) {
-			PlayerIndex = 0;
-		}
 	}
 
 	private void TunrDiceRoll() {   // Wait for dice roll, load previously selected path (if any)
@@ -62,29 +50,41 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 	private void TurnPathMark() {           // Marking path stage
 
 		IsSubscribedStartWalk = false;
-		if (CurrentPath != null) {
+		if (CurrentPath != null)
 			TurnPathMarked(CurrentPath.Last());
-		}
 		InputManager.MousePressed += TurnPathMarked;
 	}
 
 	private void TurnPathMarked(Field targetField) {    // Wait for confirmation stage (path can be redefinied)
+
 		CurrentPath = FieldManager.Master.MarkPath(targetField, MovementPoints);
 		if (CurrentPath != null && IsSubscribedStartWalk == false) {    // Before allowing to go down this path, check if it's correct
-
 			IsSubscribedStartWalk = true;
 			InputManager.KeySpace += TurnPathStartWalk;
 		}
 	}
-	
-	private void TurnPathStartWalk () {     // Path travel stage, animate movement (can't mark new path/start new walk)
+
+	private void TurnPathStartWalk() {     // Path travel stage, animate movement (can't mark new path/start new walk)
+
+		List<Field> walkablePath = new List<Field>();
+
 		if (GameBusy != null)
 			GameBusy(false);
 		InputManager.MousePressed -= TurnPathMarked;
 		InputManager.KeySpace -= TurnPathStartWalk;
-		List<Field> walkablePath = new List<Field>();
-		walkablePath = CurrentPath.Take(MovementPoints).ToList();	// Travel only walkable path
+
+		walkablePath = CurrentPath.Take(MovementPoints).ToList();   // Travel only walkable path
 		StartCoroutine(PathTick(walkablePath));
+	}
+
+	// Private Methods
+
+	private void CycleNextPlayer() {
+
+		CurrentPlayer = Players[PlayerIndex];
+		PlayerIndex++;
+		if (PlayerIndex > Players.Count - 1)
+			PlayerIndex = 0;
 	}
 
 	private IEnumerator PathTick(List<Field> path) {
@@ -99,26 +99,21 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 			yield return new WaitForSeconds(movementSpeed);
 			FieldManager.Master.ClearField(path[i]);
 		}
-		
-		if (GameBusy != null) {
+		if (GameBusy != null)
 			GameBusy(true);
-		}
 		TurnPathMark();
 		yield return null;
 	}
-
-	// Global Methods
 	
+	// Global Methods
+
 	public void EndTurn() {
+
 		AEDice.DiceAnimEnd -= TurnPathMark;
-
-		if (CurrentPath != null) {
+		if (CurrentPath != null)
 			CurrentPlayer.SetPath(CurrentPath);
-		}
-
 		InputManager.MousePressed -= TurnPathMarked;
 		InputManager.KeySpace -= TurnPathStartWalk;
-
 		CurrentPath = null;
 		TurnStart();
 	}
@@ -136,10 +131,5 @@ public class PlayerManager : GenericSingletonClass<PlayerManager>
 		int b = Random.Range(1, 7);
 		MovementPoints = a + b;
 		return a.ToString() + b.ToString();
-	}
-
-	// Destroy
-
-	private void OnDestroy() {
 	}
 }

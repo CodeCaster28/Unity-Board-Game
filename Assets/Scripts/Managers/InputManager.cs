@@ -27,6 +27,8 @@ public class InputManager : MonoBehaviour {
 	private Ray ray;
 	private RaycastHit hit;
 
+	// Mono Methods
+
 	void Update() {
 		InvokeActionOnInput();
 	}
@@ -75,8 +77,6 @@ public class InputManager : MonoBehaviour {
 			zoom = Input.GetAxis("Mouse ScrollWheel");
 			OnScrollWheel(zoom);
 		}
-
-
 	}
 
 	// Notify subscribers

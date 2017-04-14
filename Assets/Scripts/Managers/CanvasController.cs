@@ -10,6 +10,8 @@ public class CanvasController : MonoBehaviour {
 	private List<Transform> Controls;
 	private string CurrentDiceVal;
 
+	// Mono Methods
+
 	private void Start() {
 		CurrentDiceVal = "00";
 		Controls = new List<Transform>();
@@ -23,6 +25,17 @@ public class CanvasController : MonoBehaviour {
 		AEDice.DiceAnimEnd += NewTurnButtonEnabled;
 		AEDice.DiceAnimResult += ShowResult;
 	}
+
+	private void OnDestroy() {
+		PlayerManager.TurnStarted -= ShowNewTurnText;
+		PlayerManager.TurnStarted -= ShowDice;
+		PlayerManager.GameBusy -= NewTurnButtonEnabled;
+		PlayerManager.PathTicked -= UpdateResult;
+		AEDice.DiceAnimEnd -= NewTurnButtonEnabled;
+		AEDice.DiceAnimResult -= ShowResult;
+	}
+
+	// Private Methods
 
 	private void ShowDice () {
 		Transform image = Controls.Where(obj => obj.name == "DiceRoll").SingleOrDefault();
@@ -69,15 +82,6 @@ public class CanvasController : MonoBehaviour {
 		text.GetComponent<Text>().text = str;
 	}
 
-	public void HideResult() {
-		Transform text = Controls.Where(obj => obj.name == "DiceResult").SingleOrDefault();
-		AnimatorStateInfo Animation = text.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-		if (Animation.IsName("Result") || Animation.IsName("DiceTilt")) {
-			text.GetComponent<Text>().enabled = false;
-			text.GetComponent<Animator>().SetTrigger("EndTurn");
-		}
-	}
-
 	private void ShowNewTurnText() {
 		Transform text = Controls.Where(obj => obj.name == "StartTurnText").SingleOrDefault();
 		text.GetComponent<Animator>().SetTrigger("FadeOut");
@@ -94,12 +98,12 @@ public class CanvasController : MonoBehaviour {
 		button.GetComponent<Button>().interactable = enabled;
 	}
 
-	private void OnDestroy() {
-		PlayerManager.TurnStarted -= ShowNewTurnText;
-		PlayerManager.TurnStarted -= ShowDice;
-		PlayerManager.GameBusy -= NewTurnButtonEnabled;
-		PlayerManager.PathTicked -= UpdateResult;
-		AEDice.DiceAnimEnd -= NewTurnButtonEnabled;
-		AEDice.DiceAnimResult -= ShowResult;
-	}
+	/*public void HideResult() {
+		Transform text = Controls.Where(obj => obj.name == "DiceResult").SingleOrDefault();
+		AnimatorStateInfo Animation = text.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+		if (Animation.IsName("Result") || Animation.IsName("DiceTilt")) {
+			text.GetComponent<Text>().enabled = false;
+			text.GetComponent<Animator>().SetTrigger("EndTurn");
+		}
+	}*/
 }

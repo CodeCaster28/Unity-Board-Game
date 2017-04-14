@@ -6,16 +6,18 @@ using UnityEngine;
 public class FieldManager : GenericSingletonClass<FieldManager> 
 {
 	private List<Field> gameFields;
-	private Field currentPosition;
-
 	public Material Dot;            // Path "dot" material to display on marked path
 	public Material Cross;          // Path "cross" material to display on last field in marked path
+
+	// Mono Methods
 
 	void Start() {
 		gameFields = GetComponentsInChildren<Field>().ToList();      // Store all fields
 		ClearAllFields();
 		Initialize();
 	}
+
+	// Check if all fields haveno empty adjacted nodes
 
 	void Initialize() {
 		foreach (Field field in gameFields) {
@@ -29,12 +31,16 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 
 	// Global Methods
 
+	private Field currentPosition;
+
 	public List<Field> MarkPath(Field clickedField, int movementPoints) {
 		currentPosition = PlayerManager.GetCurrentPlayer().GetPosition();
 		if (!(currentPosition == clickedField))
 			return HighlightPath(currentPosition, movementPoints, clickedField);
 		else return null;
 	}
+
+	// Private Methods
 
 	private List<Field> HighlightPath(Field Start, int movementPoints, Field End) {
 
@@ -57,8 +63,8 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 			CrossFieldWalkable(walkablePath[walkablePath.Count - 1]);
 		return path;
 	}
-
-	// Used by HighlightPath(), clear field also used by Start() and PlayerManager
+	
+	// Field highlighting methods
 
 	public void ClearField(Field field) {
 		field.GetComponent<MeshRenderer>().material = Dot;
@@ -94,8 +100,6 @@ public class FieldManager : GenericSingletonClass<FieldManager>
 		field.GetComponent<MeshRenderer>().material = Cross;
 		field.GetComponent<MeshRenderer>().material.color = Color.white;
 	}
-
-
 
 	// Editor GUI button function, called from each field
 	// Allows to create new path from editor inspector, assigning name, id and adjacencies automatically (very handy)
