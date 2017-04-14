@@ -18,11 +18,12 @@ public class PlayerManager : GenericSingletonClass<PlayerManager> {
 	private static bool IsSubscribedStartWalk;
 	private int MovementPoints;
 	private int PlayerCount;
+	private bool WaitForStop;
 
 	// Mono Methods
 
 	void Start() {
-
+		WaitForStop = false;
 		PlayerCount = Players.Count;
 		PlayerIndex = 0;
 		TurnStart();
@@ -52,7 +53,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager> {
 		IsSubscribedStartWalk = false;
 		if (CurrentPath != null)
 			TurnPathMarked(CurrentPath.Last());
-		InputManager.MousePressed += TurnPathMarked;
+		InputManager.MouseClickField += TurnPathMarked;
 	}
 
 	private void TurnPathMarked(Field targetField) {    // Wait for confirmation stage (path can be redefinied)
@@ -70,7 +71,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager> {
 
 		if (GameBusy != null)
 			GameBusy(false);
-		InputManager.MousePressed -= TurnPathMarked;
+		InputManager.MouseClickField -= TurnPathMarked;
 		InputManager.KeySpace -= TurnPathStartWalk;
 
 		walkablePath = CurrentPath.Take(MovementPoints).ToList();   // Travel only walkable path
@@ -90,7 +91,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager> {
 	private IEnumerator PathTick(List<Field> path) {
 
 		float movementSpeed = path.Count < 4 ? 0.325f : 1.30f / path.Count;
-
+		InputManager.MousePressed += PathStopWalk;
 		for (int i = 0; i < path.Count; i++) {
 			MovementPoints--;
 			if (PathTicked != null)
@@ -98,13 +99,22 @@ public class PlayerManager : GenericSingletonClass<PlayerManager> {
 			CurrentPlayer.SetPosition(path[i]);
 			yield return new WaitForSeconds(movementSpeed);
 			FieldManager.Master.ClearField(path[i]);
+			if (WaitForStop == true) {
+				WaitForStop = false;
+				break;
+			}
 		}
+		InputManager.MousePressed -= PathStopWalk;
 		if (GameBusy != null)
 			GameBusy(true);
 		TurnPathMark();
 		yield return null;
 	}
-	
+
+	private void PathStopWalk() {   // Indicate that user want to stop moving
+		WaitForStop = true;
+	}
+
 	// Global Methods
 
 	public void EndTurn() {
@@ -112,7 +122,7 @@ public class PlayerManager : GenericSingletonClass<PlayerManager> {
 		AEDice.DiceAnimEnd -= TurnPathMark;
 		if (CurrentPath != null)
 			CurrentPlayer.SetPath(CurrentPath);
-		InputManager.MousePressed -= TurnPathMarked;
+		InputManager.MouseClickField -= TurnPathMarked;
 		InputManager.KeySpace -= TurnPathStartWalk;
 		CurrentPath = null;
 		TurnStart();

@@ -6,8 +6,8 @@ public class InputManager : MonoBehaviour {
 
 	public delegate void MouseMovedDelegate(float xMovement, float yMovement);
 	public static event MouseMovedDelegate MouseMoved;
-	public delegate void MousePressedDelegate(Field clickedField);
-	public static event MousePressedDelegate MousePressed;
+	public delegate void MouseClickFieldDelegate(Field clickedField);
+	public static event MouseClickFieldDelegate MouseClickField;
 	public delegate void KeyForwardDelegate(bool forwardPan);
 	public static event KeyForwardDelegate KeyForward;
 	public delegate void KeySideDelegate(bool sidePan);
@@ -16,6 +16,8 @@ public class InputManager : MonoBehaviour {
 	public static event MouseWheelDelegate ScrollWheel;
 	public delegate void KeySpacelDelegate();
 	public static event KeySpacelDelegate KeySpace;
+	public delegate void MousePressedDelegate();
+	public static event MousePressedDelegate MousePressed;
 
 	private float xMovement;
 	private float yMovement;
@@ -38,15 +40,17 @@ public class InputManager : MonoBehaviour {
 	private void InvokeActionOnInput() {
 
 		if (Input.GetMouseButtonDown(0)) {
+			OnMousePressed();
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if (Physics.Raycast(ray, out hit)) {
 				if (!UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) { 
 					if (hit.collider.GetComponent<Field>() != null) {
 						clickedField = hit.collider.GetComponent<Field>();
-						OnMousePressed(clickedField);
+						OnMouseClickedField(clickedField);
 					}
 				}
 			}
+
 		}
 		if (Input.GetKey(KeyCode.Space)) {
 			OnKeySpace();
@@ -85,9 +89,9 @@ public class InputManager : MonoBehaviour {
 		if (MouseMoved != null)
 			MouseMoved(xMovement, yMovement);
 	}
-	private static void OnMousePressed(Field clickedField) {
-		if (MousePressed != null)
-			MousePressed(clickedField);
+	private static void OnMouseClickedField(Field clickedField) {
+		if (MouseClickField != null)
+			MouseClickField(clickedField);
 	}
 	private static void OnKeyForward(bool forwardPan) {
 		if (KeyForward != null)
@@ -104,5 +108,9 @@ public class InputManager : MonoBehaviour {
 	private static void OnKeySpace() {
 		if (KeySpace != null)
 			KeySpace();
+	}
+	private static void OnMousePressed() {
+		if (MousePressed != null)
+			MousePressed();
 	}
 }
