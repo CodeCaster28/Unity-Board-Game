@@ -98,12 +98,14 @@ public class CanvasController : MonoBehaviour {
 		button.GetComponent<Button>().interactable = enabled;
 	}
 
-	/*public void HideResult() {
+	// Public Methods (from event system)
+
+	public void HideResult() {		
 		Transform text = Controls.Where(obj => obj.name == "DiceResult").SingleOrDefault();
 		AnimatorStateInfo Animation = text.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 		if (Animation.IsName("Result") || Animation.IsName("DiceTilt")) {
 			text.GetComponent<Text>().enabled = false;
 			text.GetComponent<Animator>().SetTrigger("EndTurn");
 		}
-	}*/
+	}
 }
