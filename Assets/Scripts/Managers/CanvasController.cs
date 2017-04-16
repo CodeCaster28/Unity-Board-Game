@@ -9,6 +9,11 @@ public class CanvasController : MonoBehaviour {
 
 	private List<Transform> Controls;
 	private string CurrentDiceVal;
+	private Transform DiceRoll;
+	private Transform DiceRollButton;
+	private Transform DiceResult;
+	private Transform StartTurnText;
+	private Transform TurnButton;
 
 	// Mono Methods
 
@@ -18,6 +23,13 @@ public class CanvasController : MonoBehaviour {
 		foreach (Transform child in transform) {
 			Controls.Add(child);
 		}
+
+		DiceRoll = Controls.Where(obj => obj.name == "DiceRoll").SingleOrDefault();
+		DiceRollButton = Controls.Where(obj => obj.name == "DiceRollButton").SingleOrDefault();
+		DiceResult = Controls.Where(obj => obj.name == "DiceResult").SingleOrDefault();
+		StartTurnText = Controls.Where(obj => obj.name == "StartTurnText").SingleOrDefault();
+		TurnButton = Controls.Where(obj => obj.name == "TurnButton").SingleOrDefault();
+
 		PlayerManager.TurnStarted += ShowNewTurnText;
 		PlayerManager.TurnStarted += ShowDice;
 		PlayerManager.GameBusy += NewTurnButtonEnabled;
@@ -38,24 +50,20 @@ public class CanvasController : MonoBehaviour {
 	// Private Methods
 
 	private void ShowDice () {
-		Transform image = Controls.Where(obj => obj.name == "DiceRoll").SingleOrDefault();
-		Transform button = Controls.Where(obj => obj.name == "DiceRollButton").SingleOrDefault();
-		if (button.GetComponent<Button>().interactable == false) {
-			button.GetComponent<Button>().interactable = true;
-			image.GetComponent<Animator>().SetTrigger("ResetDice");
+		if (DiceRollButton.GetComponent<Button>().interactable == false) {
+			DiceRollButton.GetComponent<Button>().interactable = true;
+			DiceRoll.GetComponent<Animator>().SetTrigger("ResetDice");
 		}
 	}
 
 	private void ShowResult() {
-		Transform text = Controls.Where(obj => obj.name == "DiceResult").SingleOrDefault();
 		CurrentDiceVal = PlayerManager.Master.RollMovementPoints();
-		text.GetComponent<Text>().text = CurrentDiceVal;
-		text.GetComponent<Text>().enabled = true;
-		text.GetComponent<Animator>().SetTrigger("ShowResult");
+		DiceResult.GetComponent<Text>().text = CurrentDiceVal;
+		DiceResult.GetComponent<Text>().enabled = true;
+		DiceResult.GetComponent<Animator>().SetTrigger("ShowResult");
 	}
 
 	private void UpdateResult() {
-		Transform text = Controls.Where(obj => obj.name == "DiceResult").SingleOrDefault();
 		string str = CurrentDiceVal;
 
 		if (str.Length == 2) {
@@ -66,7 +74,7 @@ public class CanvasController : MonoBehaviour {
 			}
 			else {
 				str = str[0].ToString();
-					text.GetComponent<Animator>().SetTrigger("Tilt");
+				DiceResult.GetComponent<Animator>().SetTrigger("Tilt");
 			}
 		}
 		else if (str.Length == 1) {
@@ -79,33 +87,28 @@ public class CanvasController : MonoBehaviour {
 			else str = "";
 		}
 		CurrentDiceVal = str;
-		text.GetComponent<Text>().text = str;
+		DiceResult.GetComponent<Text>().text = str;
 	}
 
 	private void ShowNewTurnText() {
-		Transform text = Controls.Where(obj => obj.name == "StartTurnText").SingleOrDefault();
-		text.GetComponent<Animator>().SetTrigger("FadeOut");
+		StartTurnText.GetComponent<Animator>().SetTrigger("FadeOut");
 	}
 
 	private void NewTurnButtonEnabled() {
-		Transform button = Controls.Where(obj => obj.name == "TurnButton").SingleOrDefault();
-		button.GetComponent<Button>().interactable = true;
-
+		TurnButton.GetComponent<Button>().interactable = true;
 	}
 
 	private void NewTurnButtonEnabled(bool enabled) {
-		Transform button = Controls.Where(obj => obj.name == "TurnButton").SingleOrDefault();
-		button.GetComponent<Button>().interactable = enabled;
+		TurnButton.GetComponent<Button>().interactable = enabled;
 	}
 
 	// Public Methods (from event system)
 
 	public void HideResult() {		
-		Transform text = Controls.Where(obj => obj.name == "DiceResult").SingleOrDefault();
-		AnimatorStateInfo Animation = text.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
+		AnimatorStateInfo Animation = DiceResult.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
 		if (Animation.IsName("Result") || Animation.IsName("DiceTilt")) {
-			text.GetComponent<Text>().enabled = false;
-			text.GetComponent<Animator>().SetTrigger("EndTurn");
+			DiceResult.GetComponent<Text>().enabled = false;
+			DiceResult.GetComponent<Animator>().SetTrigger("EndTurn");
 		}
 	}
 }
