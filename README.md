@@ -39,6 +39,5 @@ Each player can choose a path to move to, firstly select a path you wish to move
 
 **To Do**
 
-* Event log box
 * Fix camera rotate not always capped when moving mouse fast
 * Pawn materials coloured by code (one material for all pawns)
